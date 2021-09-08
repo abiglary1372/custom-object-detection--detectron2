@@ -43,4 +43,5 @@ Therefore do the following:
 * if you don't want to train the model (it takes a lot of time) copy the model file from the "savedModles" folder (dont forget to comment out the training and validation lines "#trainer= run_training() #run_evaluation(trainer)" in the main function )
 * run the script 
 
-
+# Jupyter notebook 
+if you don't want to go through the hassle of installing the dependencies just open the Jupyter notebook inside google collab 
