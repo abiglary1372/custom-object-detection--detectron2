@@ -2,9 +2,10 @@
 
 ## running the code on virual env
 
-after installing all the dependacies using the *.yml file provided, extracting the zip file u will have the foollowing :
+after installing all the dependacies using the *.yml file provided, creat the following project directory :
 
         objectDetection/
+		main.py
                data/
                    output/
                    rawDataset/
