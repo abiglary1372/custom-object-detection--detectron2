@@ -1,7 +1,7 @@
-# custom object detection (detectron2)
+# Custom object detection (detectron2)
 
-# About the project 
-in this project we are utilizing the Detectron2 vision library to train a custum object detector. the datasets that are used for training validation and testing should be in COCO format 
+## About the project 
+in this project, we are utilizing the Detectron2 vision library to train a custom object detector. the datasets that are used for training validation and testing should be in COCO format. 
 
 in the case of this project we are trainig the model on data set of cars so that we are able to detect cars in an image.
 
