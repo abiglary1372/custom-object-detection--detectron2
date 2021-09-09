@@ -5,7 +5,7 @@ in this project, we are utilizing the Detectron2 vision library to train a custo
 
 in the case of this project we are trainig the model on data set of cars so that we are able to detect cars in an image.
 
-## running the code on virual env
+## Running the code on virual env
 after installing all the dependacies using the *.yml file provided, creat the following project directory :
 
         objectDetection/
