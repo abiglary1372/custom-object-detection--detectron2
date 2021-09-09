@@ -146,24 +146,24 @@ def main():
     
     
 def prepare_data_sets(filedir,directory):
-    """ comments:
-        this function prepares the provided data set to be used by detectrone 
-        the .json file that provides us with annotation data on our images is not 
-        complete and lacks two keys "catagory" and "images" which the models needs to start 
-        the training and evaluation,therefore this function generates the proper coco dataset json file based on the 
-        classes that we want to detect and the image files information.
-        also we need to devide the data set to three sets train validation and test. this function after generating the 
-        coco json file devides the data set to thoses three sets and stores the values under this directory: .............
-        so briefly the function does the following:
-            1-first it extracts the annotation data from the provided json file
-            2- it filters out any object annotations that are not cars
-            3- it devides them into three sets training validation and test 
-            4- it then copies the corresponding immages of each set to their coresponding folder in the projects 
-            directory
-            5- then the two other necessary keys "catagory" and "images" are created and with the annotaion dat 
-            are combined to gather to generate the jason datastructure for coco datasets for each of the three sets 
-            6- then for each set the json file is saved in their coresponding directory 
-    """
+ """ comments:
+         this function prepares the provided data set to be used by detectron2
+         the .json file that provides us with annotation data on our images is not 
+         complete and lacks two keys "category" and "images" which the models need to start 
+         the training and evaluation, therefore this function generates the proper coco dataset JSON file based on the 
+         classes that we want to detect and the image files information.
+         also, we need to divide the data set into three sets train validation and test. this function after generating the 
+         coco JSON file divides the data set into those three sets and stores the values under this directory: .............
+         so briefly the function does the following:
+         1-first it extracts the annotation data from the provided JSON file
+         2- it filters out any object annotations that are not cars
+         3- it divides them into three sets training validation and test 
+         4- it then copies the corresponding images of each set to their corresponding folder in the projects 
+         directory
+         5- then the two other necessary keys "category" and "images" are created and with the annotation data 
+         are combined to gather to generate the JSON data structure for coco datasets for each of the three sets 
+         6- then for each set the JSON file is saved in their corresponding directory 
+	 """
     
     imList=[];
     
@@ -332,9 +332,9 @@ def visualize_training_dataset():
     
 class CocoTrainer(DefaultTrainer):
   '''comments:
-      Before starting training, we need to make sure that the model validates against our validation set. Unfortunately, this does not happen by default 🤔.
+      Before starting training, we need to make sure that the model validates against our validation set. Unfortunately, this does not happen by default.
       We can easily do this by defining our custom trainer based on the Default Trainer with the COCO Evaluator. this is what we do with this class. 
-      when the trainer is executed it will first call this class and soes the validation and then the training starts
+      when the trainer is executed it will first call this class and does the validation and then the training starts
       
       '''
   @classmethod
@@ -351,11 +351,12 @@ def configure_model_for_training():
     '''comments:
         here we configure our custom object detection model 
         we chose the FASTER RNN model from the model zoo
-        the most important part here is the line .. where we configure wether we want CPU 
-        computation for training or GPU if the goal is GPU the line must be comented out
-        also for GPU the cfg.SOLVER.IMS_PER_BATCH  is very importat especially when you get the runtime error 
+        the most important part here is the line .. where we configure whether we want CPU 
+        computation for training or GPU if the goal is GPU the line must be commented out
+        also for GPU the cfg.SOLVER.IMS_PER_BATCH  is very important especially when you get the runtime error 
     
     '''
+    
     cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_X_101_32x8d_FPN_3x.yaml")) #***very important for inference
     cfg.DATASETS.TRAIN = ("my_dataset_train",)
     cfg.DATASETS.TEST = ("my_dataset_val",)
@@ -391,7 +392,7 @@ def run_training():
 
 def run_evaluation(trainer):
     '''comments:
-    this funtion runs an inference on our test set and out puts a table of avarage Precisions AP which would
+    this function runs an inference on our test set and out puts a table of average Precisions AP which would
         give us an idea on how the model is performing'''
         
         
@@ -404,10 +405,10 @@ def run_evaluation(trainer):
 
 def run_inference_on_test_set(vis=False):
     '''comments:
-        in this function we run an inference on the trained model that we have stored in the directory
-        this function is independant of the training and when we have a trained model we can use it to do inference on the test set
-        this function also out puts three important data structure that are essential to the next part of the algorithm 
-        which is detectin the color red
+        in this function, we run inference on the trained model that we have stored in the directory
+        this function is independent of the training and when we have a trained model we can use it to do inference on the test set
+        this function also outputs three important data structures that are essential to the next part of the algorithm 
+        which is detected the color red
         
         '''
     
@@ -462,19 +463,19 @@ def get_color(boxPerIm,imname,show):
     
     '''comments:
         
-        this is the funtion that will run the algorithm we use to determine the color of a detected car 
+        this is the function that will run the algorithm we use to determine the color of a detected car 
         in the test set, here is how the algorithm works:
             1- the function recives the coordinates of the boundary boxes from the run_inference_on_test_set() function 
-            2- then starts running through the test set directory loading imagesand croping the cars out using the boundary box coordinates 
-            3- then saves the croped images as rgb and counts the number of pixels that have the rgb value of [190,x,x] to [255,x,x] which covers most shades of red
-            4- then of these pixels make more then 10 percent of the total pixels in the immage the car is detected 
+            2- then starts running through the test set directory loading images and cropping the cars out using the boundary box coordinates 
+            3- then saves the cropped images as RGB and counts the number of pixels that have the RGB value of [190,x,x] to [255,x,x] which covers most shades of red
+            4- then of these pixels make more than 10 percent of the total pixels in the image the car is detected 
             as red 
             
         commenting on the performance of the classification:
-            the object dettection model works well in detectin of cars although it is observed that somtimes it considers
+            the object detection model works well in detection of cars although it is observed that sometimes it considers
             trucks and motorcycles as cars too
-            the color detection algorithm seems to be performing poorly speciallly for lower quality images and maybe a more
-            complex algorithms is needed
+            the color detection algorithm seems to be performing poorly specially for lower quality images and maybe a more
+            complex algorithms are needed
         '''
     
     #[xmin,ymin,xmax,ymax] x width, y hight
@@ -551,11 +552,11 @@ def get_color(boxPerIm,imname,show):
 def generate_output(nameList, coordinateList, colorRed):
     
     '''comments:
-        here a csv file is created and then stored as the final output 
+        here a CSV file is created and then stored as the final output 
         the CSV file has three columns 
-        first column is the image file nams
+        the first column is the image file name
         second is the boundary box coordinates of the detected car 
-        third is true false column determining wether the car is red or not 
+        third is the true false column determining whether the car is red or not 
         
     '''
     finalOut={"file name" : nameList , "box coordinates": coordinateList , "is red": colorRed}; #the final csv out put 
