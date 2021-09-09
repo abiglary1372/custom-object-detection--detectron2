@@ -44,4 +44,4 @@ Therefore do the following:
 * run the script 
 
 # Jupyter notebook 
-if you don't want to go through the hassle of installing the dependencies just open the Jupyter notebook inside google collab 
+if you don't want to go through the hassle of installing the dependencies just open the Jupyter notebook inside google colab 
