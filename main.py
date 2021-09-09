@@ -3,16 +3,16 @@
     
     author: Amin Biglary Makvand
     
-    the goal of this script is to train a object detection model for cars
+    the goal of this script is to train an object detection model for cars
     then identifies the red cars
-    then output a csv containing the information on the inferences made
-    for this task the folllowing tools where used :
-        an ubuntu based system (ubuntu .. )
+    then output a CSV containing the information on the inferences made
+    for this task the following tools were used :
+        an ubuntu-based system 
         anaconda package to create a virtual environment 
-        detectron2 the facebook computer vision libarary 
+        detectron2 the Facebook computer vision library 
         CUDAtoolkit to enable GPU computation
         ****note: a *.yaml file is provided for the user to be able to replicate the 
-        virtual env with all the dependancies exactly 
+        virtual env with all the dependencies exactly 
         
     here is a discribtion of the project directory:
         objectDetection/
@@ -30,24 +30,24 @@
                    savedModles/
                    
           explaining each directory:
-              1- main.py is the mainscript for running the entire pipeline
-              2-"output" is the directory where the final csv is stored
+              1- main.py is the main script for running the entire pipeline
+              2-"output" is the directory where the final CSV is stored
               3- "rawDataset" is where we put the provided dataset (images+json file)
-              4- "test" is where the tets data set is created after the functoin prepare_data_sets() is executed 
-              5- "train" is where the training data set is created after the functoin prepare_data_sets() is executed 
-              6- "valid" is where the validation data set is created after the functoin prepare_data_sets() is executed 
+              4- "test" is where the test data set is created after the function prepare_data_sets() is executed 
+              5- "train" is where the training data set is created after the function prepare_data_sets() is executed 
+              6- "valid" is where the validation data set is created after the function prepare_data_sets() is executed 
               7- traineModel is where the final model is stored after completing the training job
-              its important to note that if you already have a trained model and dont want to run the training job again
-              copy your model here and coment out the training and evaluation lines in main
+              it is important to note that if you already have a trained model and don't want to run the training job again
+              copy your model here and comment out the training and evaluation lines in the main
               8- savedModels is where you can save your trained models
-              9- eval is where evaluation data is saved after runing the evaluation job
+              9- eval is where evaluation data is saved after running the evaluation job
               10- customTestDataset/ a custom test created by roboflow for further testing
         
         **commenting on the performance of the classification:
-            the object dettection model works well in detectin of cars although it is observed that somtimes it considers
+            the object detection model works well in detection of cars although it is observed that sometimes it considers
             trucks and motorcycles as cars too
-            the color detection algorithm seems to be performing poorly speciallly for lower quality images and maybe a more
-            complex algorithms is needed
+            the color detection algorithm seems to be performing poorly specially for lower quality images and maybe a more
+            complex algorithms are needed
             
             
 '''
@@ -92,14 +92,14 @@ mainPath = mainPath[:len(mainPath) - 7]
 def main():
     '''  comments:   
     
-        here the entire pipe line from data preprocessing to the final out put is executed
-        it is imprtant to note that a traiened model is lready provided therefor the lines 139 140
-        related model trainning and validation can be commented out, if u want to start a training job u have 
+        here the entire pipeline from data preprocessing to the final output is executed
+        it is important to note that a trained model is already provided therefore the lines 139 140
+        related model training and validation can be commented out, if u want to start a training job u have 
         to uncomment them.
-        also the line about visualizing the training data set is comented out. it visualizes the registered data
-        set with annotatoins to make sure that the dataset is registered properly
+        also, the line about visualizing the training data set is commented out. it visualizes the registered data
+        set with annotations to make sure that the dataset is registered properly
         the line for running inference on the test dataset the function accepts a boolean which 
-        when its false means that it wont visualize the models output and true means otherwise
+        when its false means that it won't visualize the model's output and true means otherwise
         
         below describes the entire project directory :
            objectDetection/
@@ -115,18 +115,18 @@ def main():
                    eval/
                    savedModles/
                    
-          expalining each directory:
-              1- main.py is the mainscript for running the entire pipeline
-              2-"output" is the directory where the final csv is stored
+          explaining each directory:
+              1- main.py is the main script for running the entire pipeline
+              2-"output" is the directory where the final CSV is stored
               3- "rawDataset" is where we put the provided dataset (images+json file)
-              4- "test" is where the tets data set is created after the functoin prepare_data_sets() is executed 
-              5- "train" is where the training data set is created after the functoin prepare_data_sets() is executed 
-              6- "valid" is where the validation data set is created after the functoin prepare_data_sets() is executed 
+              4- "test" is where the test data set is created after the function prepare_data_sets() is executed 
+              5- "train" is where the training data set is created after the function prepare_data_sets() is executed 
+              6- "valid" is where the validation data set is created after the function prepare_data_sets() is executed 
               7- traineModel is where the final model is stored after completing the training job
-              its important to note that if you already have a trained model and dont want to run the training job again
-              copy your model here and coment out the training and evaluation lines in main
+              it's important to note that if you already have a trained model and don't want to run the training job again
+              copy your model here and comment out the training and evaluation lines in the main
               8- savedModels is where you can save your trained models
-              9- eval is where evaluation data is saved after runing the evaluation job
+              9- eval is where evaluation data is saved after running the evaluation job
               
     '''
     cocoJson = os.path.join(mainPath,'data','rawDataSet','annotations_sample.json' );
