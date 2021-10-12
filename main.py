@@ -134,19 +134,19 @@ def main():
     show_red_car = False
     show_test_predictions = False
     
-    #prepare_data_sets(cocoJson,images)
+    prepare_data_sets(cocoJson,images)
     register_datasets()
-    #visualize_training_dataset()
+    visualize_training_dataset()
     configure_model_for_training()
-    #trainer= run_training()
-    #run_evaluation(trainer)
+    trainer= run_training()
+    run_evaluation(trainer)
     (boxPerIm,imname)=run_inference_on_test_set(show_test_predictions)
     (nameList, coordinateList, colorRed)=get_color(boxPerIm,imname,show_red_car)
     generate_output(nameList, coordinateList, colorRed)
     
     
 def prepare_data_sets(filedir,directory):
- """ comments:
+    """ comments:
          this function prepares the provided data set to be used by detectron2
          the .json file that provides us with annotation data on our images is not 
          complete and lacks two keys "category" and "images" which the models need to start 
@@ -168,140 +168,73 @@ def prepare_data_sets(filedir,directory):
     imList=[];
     
     file = open(filedir)
-    
+     
     #annotation data that is provided 
     annData = json.load(file);
-                     
-    #filtering anotaion from non car objects 
-    annListFlt=[]
-    for ann in annData["annotations"]:
-        if ann["category_id"] ==3:
-            annListFlt.append(ann);        
+                      
+    annListFlt= annData["annotations"]      
     annDataflt = {"annotations": annListFlt}
     
     ##### dividing to validation test and train 
-
+     
     length = len(annListFlt)
-    
+     
     # determining the traing validation and test percentages
     pt=0.7
     pv=0.2
-    
+     
     tre = int(length*pt); #end of train
     vs = tre; #start of vallidation
     ve = vs+ int(length*pv);# end of validation
     ts= ve; #start of test
     te = length; #end of test 
-    
+     
     imageTrain=[]
     imageValid=[]
     imageTest=[]
+     
+    trainSet=annData["images"][0:tre];
+    validSet=annData["images"][vs:ve];
+    testSet=annData["images"][ts:te];
     
-    trainSet=annListFlt[0:tre];
-    validSet=annListFlt[vs:ve];
-    testSet=annListFlt[ts:te];
-    
+    trainSetann=annData["annotations"][0:tre];
+    validSetann=annData["annotations"][vs:ve];
+    testSetann=annData["annotations"][ts:te];
+     
     ###copying test files to test folder
     path=[];
     for diction in testSet:
         path.append(os.path.join(directory,str(diction["file_name"])))
     for f in path:
         shutil.copy(f, os.path.join(mainPath,'data','test'))
-    
+     
     ################copying the files for training
     trainPath=[];
     for diction in trainSet:
         trainPath.append(os.path.join(directory,str(diction["file_name"])))
     for f in trainPath:
         shutil.copy(f, os.path.join(mainPath,'data','train'))
-    
+     
     ###############copying the files for validation
     validPath=[];
     for diction in validSet:
         validPath.append(os.path.join(directory,str(diction["file_name"])))
     for f in validPath:
-        shutil.copy(f, os.path.join(mainPath,'data','valid'))
-    
-    ####image data for train
-    
-    directory = os.path.join(mainPath,'data','train')
-    
-    imListTrtain=[]
-    for entry in os.scandir(directory): 
-        if (entry.path.endswith(".jpg")):
-            size= len(entry.name);
-            im = cv2.imread(os.path.join(directory,entry.name))
-            spec = im.shape
-            h=spec[0];
-            w=spec[1];
-            imItem= {
-                    "id": int(entry.name[:size - 4]),
-                    "file_name": entry.name,
-                    "height":h,
-                    "width":w
-                }
-            imListTrtain.append(imItem)                      
-    
-    ####image data for valid
-    
-    directory = os.path.join(mainPath,'data','valid')
-    
-    imListValid=[]
-    for entry in os.scandir(directory): 
-        if (entry.path.endswith(".jpg")):
-            size= len(entry.name);
-            im = cv2.imread(os.path.join(directory,entry.name))
-            spec = im.shape
-            h=spec[0];
-            w=spec[1];
-            imItem= {
-                    "id": int(entry.name[:size - 4]),
-                    "file_name": entry.name,
-                    "height":h,
-                    "width":w
-                }
-            imListValid.append(imItem)                      
-    
-    ############
-    
-    ####image data for test
-    directory = os.path.join(mainPath,'data','test')
-    
-    imListTest=[]
-    for entry in os.scandir(directory): 
-        if (entry.path.endswith(".jpg")):
-            size= len(entry.name);
-            im = cv2.imread(os.path.join(directory,entry.name))
-            spec = im.shape
-            h=spec[0];
-            w=spec[1];
-            imItem= {
-                    "id": int(entry.name[:size - 4]),
-                    "file_name": entry.name,
-                    "height":h,
-                    "width":w
-                }
-            imListTest.append(imItem)                      
-    
-    ############
-    
-    #building the catagory key
-    catData = { "categories": [{
-                "id": 0,
-                "name": "cars",
-                "supercategory": "none"
-            },
-                {
-                "id": 3,
-                "name": "cars",
-                "supercategory": "cars"}]}
-    
-    
-    
+        shutil.copy(f, os.path.join(mainPath,'data','valid')) 
+     
     #bulding the json files for each set 
-    CocoFileTrain = {"categories": catData["categories"] , "images":imListTrtain ,"annotations": trainSet };
-    CocoFileValid = {"categories": catData["categories"] , "images":imListValid ,"annotations": validSet };
-    CocoFileTest = {"categories": catData["categories"] , "images":imListTest ,"annotations": testSet };
+    CocoFileTrain = {"categories": annData["categories"] , "images":trainSet ,"annotations": trainSetann };
+    CocoFileValid = {"categories": annData["categories"] , "images":validSet ,"annotations": validSetann };
+    CocoFileTest = {"categories": annData["categories"] , "images":testSet ,"annotations": testSetann };
+ 
+ 
+#########saving the json files
+with open(os.path.join(mainPath,'data','train','CocoAnnTrain.json'), 'w') as fp1:
+    json.dump(CocoFileTrain, fp1)
+with open(os.path.join(mainPath,'data','valid','CocoAnnValid.json'), 'w') as fp2:
+    json.dump(CocoFileValid, fp2)
+with open(os.path.join(mainPath,'data','test','CocoAnnTest.json'), 'w') as fp3:
+    json.dump(CocoFileTest, fp3)
     
     
     #########saving the json files
